@@ -1,0 +1,25 @@
+{
+  "name": "mailer-bun",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "elysia": "latest",
+    "drizzle-orm": "latest",
+    "bullmq": "latest",
+    "postgres": "latest",
+    "ioredis": "latest",
+    "@sinclair/typebox": "latest"
+  },
+  "devDependencies": {
+    "drizzle-kit": "latest",
+    "@types/bun": "latest",
+    "@types/pg": "latest",
+    "typescript": "latest"
+  }
+}
