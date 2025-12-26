@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { join } from "path";
 // We don't import renderTemplate yet, we will require it after mocking
 
-const TEMPLATES_DIR = join(process.cwd(), "templates");
+const TEMPLATES_DIR = join(process.cwd(), "templates/emails");
 const DIST_DIR = join(process.cwd(), "dist_test");
 
 describe("Template Engine", () => {

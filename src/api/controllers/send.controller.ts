@@ -6,6 +6,7 @@ import { enqueueEmail } from "../../lib/queue/client";
 import { db } from "../../lib/db";
 import { messages } from "../../lib/db/schema";
 import { randomUUID } from "crypto";
+import { trace, context } from "@opentelemetry/api";
 
 export const sendEmail = async (ctx: Context) => {
     // TODO: Add Zod/TypeBox validation middleware. 
@@ -17,8 +18,8 @@ export const sendEmail = async (ctx: Context) => {
         return { error: "Missing required fields: to, template" };
     }
 
-    // Trace ID should be coming from a middleware or generated here
-    // const traceId = ctx.headers["x-trace-id"] || crypto.randomUUID();
+    // Trace ID from derived context (middleware)
+    const traceId = (ctx as any).traceId;
 
     // Authenticated client is available in ctx.store or similar if strictly typed
     // But for derived context, we access it directly if we defined it well.
@@ -40,6 +41,7 @@ export const sendEmail = async (ctx: Context) => {
             recipient: body.to,
             subject: body.subject,
             status: "queued",
+            traceId,
             createdAt: new Date(),
         });
 
@@ -50,7 +52,8 @@ export const sendEmail = async (ctx: Context) => {
             props: body.props || {},
             subject: body.subject,
             messageId,
-            clientId: client.id
+            clientId: client.id,
+            traceId
         });
 
         ctx.set.status = 202;
