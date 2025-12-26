@@ -16,19 +16,44 @@ export class ProviderManager {
     private lastFailureTime = 0;
 
     private constructor() {
-        this.primary = new SmtpProvider();
+        // 1. Initialize Providers safely
+        const smtpArgs = {
+            host: env.SMTP_HOST,
+            port: env.SMTP_PORT,
+            user: env.SMTP_USER,
+            pass: env.SMTP_PASS,
+        };
+        const hasSmtp = !!(smtpArgs.host && smtpArgs.port);
+        // Note: SmtpProvider pulls from env internally, but we check validity here if we want to be strict.
+        // Actually SmtpProvider constructor pulls env directly. We just need to know if we SHOULD use it.
+        // SmtpProvider defaults to localhost:587 if not set, so it's "always available" in a sense unless explicit override.
 
-        // Initialize Secondary (SES) if credentials exist
-        if (env.AWS_REGION && env.AWS_ACCESS_KEY_ID && env.AWS_SECRET_ACCESS_KEY) {
-            this.secondary = new AWSSESProvider(
-                env.AWS_REGION,
-                env.AWS_ACCESS_KEY_ID,
-                env.AWS_SECRET_ACCESS_KEY
-            );
+        const hasSes = !!(env.AWS_REGION && env.AWS_ACCESS_KEY_ID && env.AWS_SECRET_ACCESS_KEY);
+
+        // 2. Select Primary
+        if (env.EMAIL_PROVIDER === "ses") {
+            // Config validation guarantees hasSes is true here
+            this.primary = new AWSSESProvider(env.AWS_REGION!, env.AWS_ACCESS_KEY_ID!, env.AWS_SECRET_ACCESS_KEY!);
+
+            // 3. Select Secondary
+            if (hasSmtp) {
+                this.secondary = new SmtpProvider();
+            } else {
+                this.secondary = null;
+            }
         } else {
-            console.warn("AWS SES credentials not found. Secondary provider disabled.");
-            this.secondary = null;
+            // Primary is SMTP
+            this.primary = new SmtpProvider();
+
+            // 3. Select Secondary
+            if (hasSes) {
+                this.secondary = new AWSSESProvider(env.AWS_REGION!, env.AWS_ACCESS_KEY_ID!, env.AWS_SECRET_ACCESS_KEY!);
+            } else {
+                this.secondary = null;
+            }
         }
+
+        console.log(`[ProviderManager] Initialized. Primary: ${this.primary.name}, Secondary: ${this.secondary ? this.secondary.name : "None"}`);
     }
 
     public static getInstance(): ProviderManager {

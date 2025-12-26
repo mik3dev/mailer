@@ -16,13 +16,24 @@ const envSchema = z.object({
     SMTP_PORT: z.coerce.number().optional().default(587),
     SMTP_USER: z.string().optional(),
     SMTP_PASS: z.string().optional(),
-    SMTP_SECURE: z.coerce.boolean().default(false),
+    SMTP_SECURE: z.preprocess((val) => val === "true" || val === true, z.boolean()).default(false),
     SMTP_FROM: z.string().default("noreply@example.com"),
 
     // AWS SES
     AWS_REGION: z.string().optional(),
     AWS_ACCESS_KEY_ID: z.string().optional(),
     AWS_SECRET_ACCESS_KEY: z.string().optional(),
+
+    // Provider Config
+    EMAIL_PROVIDER: z.enum(["smtp", "ses"]).default("smtp"),
+}).refine((data) => {
+    if (data.EMAIL_PROVIDER === "ses") {
+        return !!(data.AWS_REGION && data.AWS_ACCESS_KEY_ID && data.AWS_SECRET_ACCESS_KEY);
+    }
+    return true;
+}, {
+    message: "AWS SES credentials are required when EMAIL_PROVIDER is set to 'ses'",
+    path: ["EMAIL_PROVIDER"],
 });
 
 // Validate env vars

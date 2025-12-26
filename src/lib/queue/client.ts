@@ -7,6 +7,8 @@ export interface EmailPayload {
     props: Record<string, any>;
     subject?: string;
     traceId?: string; // OpenTelemetry Trace ID
+    messageId: string; // Internal DB Message ID
+    clientId: string; // Internal DB Client ID
 }
 
 /**

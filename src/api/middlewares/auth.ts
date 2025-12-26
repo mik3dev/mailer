@@ -21,6 +21,8 @@ export const authMiddleware = (app: Elysia) =>
 
             // 2. Lookup Client
             // We query by prefix which is indexed
+            // 2. Lookup Client
+            // We query by prefix which is indexed
             const [client] = await db
                 .select()
                 .from(clients)

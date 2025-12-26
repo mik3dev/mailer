@@ -11,23 +11,32 @@ export class SmtpProvider implements EmailProvider {
             host: env.SMTP_HOST,
             port: env.SMTP_PORT,
             secure: env.SMTP_SECURE,
+            ignoreTLS: true, // Force plaintext for dev/MailHog
+            requireTLS: false,
             auth: env.SMTP_USER
                 ? {
                     user: env.SMTP_USER,
                     pass: env.SMTP_PASS,
                 }
                 : undefined,
+            // Allow self-signed certs / localhost issues in Dev
+            tls: {
+                rejectUnauthorized: false
+            }
         });
     }
 
     async send(email: EmailMessage): Promise<EmailResult> {
         try {
+            console.log(`[SmtpProvider] Connecting to ${env.SMTP_HOST}:${env.SMTP_PORT}...`);
             const result = await this.transporter.sendMail({
                 from: email.from || env.SMTP_FROM,
                 to: email.to,
                 subject: email.subject,
                 html: email.html,
             });
+
+            console.log(`[SmtpProvider] Sent OK. Response: ${result.response}, MessageID: ${result.messageId}`);
 
             return {
                 id: result.messageId,
