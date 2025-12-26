@@ -8,8 +8,7 @@ const envSchema = z.object({
     DATABASE_URL: z.string().default("postgres://postgres:postgres@localhost:5432/mailer_db"),
 
     // Redis
-    REDIS_HOST: z.string().default("localhost"),
-    REDIS_PORT: z.coerce.number().default(6379),
+    REDIS_URL: z.string().default("redis://localhost:6379"),
 
     // gRPC
     GRPC_PORT: z.coerce.number().default(50051),

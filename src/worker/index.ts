@@ -1,4 +1,5 @@
 import { Worker } from "bullmq";
+import Redis from "ioredis";
 import { env } from "../config";
 import { emailProcessor } from "./processors/email.processor";
 import { db } from "../lib/db";
@@ -11,16 +12,13 @@ const configSanitized = {
     smtp_host: env.SMTP_HOST || "localhost",
     smtp_port: env.SMTP_PORT,
     aws_region: env.AWS_REGION || "disabled",
-    redis_host: env.REDIS_HOST,
+    redis_url: env.REDIS_URL ? "set" : "unset",
 };
 
 console.log(`[Worker] Starting Email Worker...`, JSON.stringify(configSanitized, null, 2));
 
 const worker = new Worker("email-sending", emailProcessor, {
-    connection: {
-        host: env.REDIS_HOST,
-        port: env.REDIS_PORT,
-    },
+    connection: new Redis(env.REDIS_URL, { maxRetriesPerRequest: null }),
     concurrency: 5,
     limiter: {
         max: 10,

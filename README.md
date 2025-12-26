@@ -123,7 +123,7 @@ export default function Hello({ name }: { name: string }) {
 
 | Variable | Description | Default |
 | :--- | :--- | :--- |
-| `SERVICE_ROLE` | `API`, `WORKER`, `DEV` (local), or `STANDALONE` (prod monolith) | `DEV` |
+| `SERVICE_ROLE` | `API`, `WORKER`, `GRPC`, `DEV` (local), or `STANDALONE` (prod monolith) | `DEV` |
 | `DATABASE_URL` | Postgres Connection String | `...` |
 | `REDIS_URL` | Redis Connection String | `...` |
 | `SMTP_HOST` | Hostname for SMTP | `localhost` (MailHog: 1025) |

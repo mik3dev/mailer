@@ -1,12 +1,10 @@
 
 import Redis from "ioredis";
+import { env } from "../../config";
 
 // Singleton Redis connection
-// If REDIS_URL is provided, use it, otherwise fallback to localhost
-const redisUrl = process.env.REDIS_URL || "redis://localhost:6379";
-
-export const redis = new Redis(redisUrl, {
-    maxRetriesPerRequest: null, // Required for BullMQ, good practice generally
+export const redis = new Redis(env.REDIS_URL, {
+    maxRetriesPerRequest: null, // Required for BullMQ
     enableReadyCheck: false,
 });
 

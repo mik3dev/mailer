@@ -1,4 +1,5 @@
 import { Queue } from "bullmq";
+import Redis from "ioredis";
 import { env } from "../../config";
 
 export interface EmailPayload {
@@ -17,10 +18,7 @@ export interface EmailPayload {
  * Consumers (Workers) process jobs from here.
  */
 export const emailQueue = new Queue("email-sending", {
-    connection: {
-        host: env.REDIS_HOST,
-        port: env.REDIS_PORT,
-    },
+    connection: new Redis(env.REDIS_URL, { maxRetriesPerRequest: null }),
     defaultJobOptions: {
         attempts: 3,
         backoff: {

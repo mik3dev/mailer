@@ -1,0 +1,80 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mailer
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
+  mailhog:
+    image: mailhog/mailhog
+    restart: always
+    ports:
+      - "1025:1025" # SMTP
+      - "8025:8025" # Web UI
+
+  api:
+    image: ghcr.io/mik3dev/mailer:latest
+    restart: always
+    platform: linux/amd64
+    environment:
+      SERVICE_ROLE: API
+      DATABASE_URL: postgres://user:password@postgres:5432/mailer
+      REDIS_URL: redis://redis:6379
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../templates:/app/templates-src # Mount local templates
+    depends_on:
+      - postgres
+      - redis
+
+  worker:
+    image: ghcr.io/mik3dev/mailer:latest
+    restart: always
+    platform: linux/amd64
+    environment:
+      SERVICE_ROLE: WORKER
+      DATABASE_URL: postgres://user:password@postgres:5432/mailer
+      REDIS_URL: redis://redis:6379
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+    volumes:
+      - ../templates:/app/templates-src # Mount local templates
+    depends_on:
+      - postgres
+      - redis
+
+  grpc:
+    image: ghcr.io/mik3dev/mailer:latest
+    restart: always
+    platform: linux/amd64
+    environment:
+      SERVICE_ROLE: GRPC
+      DATABASE_URL: postgres://user:password@postgres:5432/mailer
+      REDIS_URL: redis://redis:6379
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+    ports:
+      - "50051:50051"
+    volumes:
+      - ../templates:/app/templates-src # Mount local templates
+    depends_on:
+      - postgres
+      - redis
+
+volumes:
+  postgres_data:
