@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const envSchema = z.object({
     // Role
-    SERVICE_ROLE: z.enum(["API", "WORKER", "DEV", "STANDALONE"]).default("DEV"),
+    SERVICE_ROLE: z.enum(["API", "WORKER", "DEV", "STANDALONE", "GRPC"]).default("DEV"),
 
     // Database
     DATABASE_URL: z.string().default("postgres://postgres:postgres@localhost:5432/mailer_db"),
@@ -10,6 +10,9 @@ const envSchema = z.object({
     // Redis
     REDIS_HOST: z.string().default("localhost"),
     REDIS_PORT: z.coerce.number().default(6379),
+
+    // gRPC
+    GRPC_PORT: z.coerce.number().default(50051),
 
     // SMTP (Optional defaults for dev)
     SMTP_HOST: z.string().optional(),

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package mailer;
+
+service MailerService {
+  rpc Send (SendRequest) returns (SendResponse);
+}
+
+message SendRequest {
+  string to = 1;
+  string template = 2;
+  optional string subject = 3;
+  optional string props_json = 4; // JSON string for flexibility
+  string client_id = 5; // Internal use or passed by gateway
+  optional string trace_id = 6;
+}
+
+message SendResponse {
+  string message_id = 1;
+  string status = 2; // "queued", "accepted"
+}

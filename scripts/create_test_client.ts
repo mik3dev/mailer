@@ -15,6 +15,7 @@ const createClient = async () => {
     }).returning();
 
     console.log("Client Created:");
+    console.log(`ID: ${client.id}`);
     console.log(`API Key: ${apiKey}`);
     console.log(`API Secret: ${apiSecret}`);
     console.log(`Prefix: ${apiKey.slice(0, 8)}`);

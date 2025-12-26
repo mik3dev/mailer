@@ -17,3 +17,8 @@ if (ROLE === "API" || ROLE === "DEV" || ROLE === "STANDALONE") {
 if (ROLE === "WORKER" || ROLE === "DEV" || ROLE === "STANDALONE") {
     import("./worker/index");
 }
+
+if (ROLE === "GRPC" || ROLE === "DEV" || ROLE === "STANDALONE") {
+    const { startGrpcServer } = await import("./grpc/server");
+    startGrpcServer();
+}

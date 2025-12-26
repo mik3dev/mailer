@@ -123,7 +123,17 @@ export default function Hello({ name }: { name: string }) {
 | `DATABASE_URL` | Postgres Connection String | `...` |
 | `REDIS_URL` | Redis Connection String | `...` |
 | `SMTP_HOST` | Hostname for SMTP | `localhost` (MailHog: 1025) |
+| `GRPC_PORT` | Port for gRPC Server | `50051` |
 | `AWS_REGION` | AWS Region for SES (Secondary) | - |
+
+## 🚀 gRPC Support (Experimental)
+
+The service exposes a gRPC interface on port `50051`. Protocol definitions are in `src/grpc/protos/mailer.proto`.
+
+**Run gRPC Server:**
+```bash
+SERVICE_ROLE=GRPC bun run src/index.ts
+```
 
 ## 🧪 Testing
 
