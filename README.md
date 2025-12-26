@@ -53,6 +53,13 @@ A backend-agnostic transactional email service built with **Bun**, **ElysiaJS**,
     SERVICE_ROLE=WORKER bun run src/index.ts
     ```
 
+    **Production Monolith (MVP):**
+    For small deployments where you want both API and Worker in a single process without the development overhead:
+    ```bash
+    SERVICE_ROLE=STANDALONE bun run src/index.ts
+    ```
+    > **Warning:** unique process means compiling emails might block the API event loop momentarily.
+
 ## 🔐 Client Management
 
 This service requires API Key authentication (`X-Api-Key`, `X-Api-Secret`). To create a new client, use the included CLI script:
@@ -112,7 +119,7 @@ export default function Hello({ name }: { name: string }) {
 
 | Variable | Description | Default |
 | :--- | :--- | :--- |
-| `SERVICE_ROLE` | `API`, `WORKER`, or `DEV` (runs both) | `DEV` |
+| `SERVICE_ROLE` | `API`, `WORKER`, `DEV` (local), or `STANDALONE` (prod monolith) | `DEV` |
 | `DATABASE_URL` | Postgres Connection String | `...` |
 | `REDIS_URL` | Redis Connection String | `...` |
 | `SMTP_HOST` | Hostname for SMTP | `localhost` (MailHog: 1025) |

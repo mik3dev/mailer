@@ -9,11 +9,11 @@ const ROLE = process.env.SERVICE_ROLE || "DEV";
 
 console.log(`Starting service with role: ${ROLE}`);
 
-if (ROLE === "API" || ROLE === "DEV") {
+if (ROLE === "API" || ROLE === "DEV" || ROLE === "STANDALONE") {
     app.listen(3000);
     console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
 }
 
-if (ROLE === "WORKER" || ROLE === "DEV") {
+if (ROLE === "WORKER" || ROLE === "DEV" || ROLE === "STANDALONE") {
     import("./worker/index");
 }

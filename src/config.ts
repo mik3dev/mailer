@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const envSchema = z.object({
     // Role
-    SERVICE_ROLE: z.enum(["API", "WORKER", "DEV"]).default("DEV"),
+    SERVICE_ROLE: z.enum(["API", "WORKER", "DEV", "STANDALONE"]).default("DEV"),
 
     // Database
     DATABASE_URL: z.string().default("postgres://postgres:postgres@localhost:5432/mailer_db"),
