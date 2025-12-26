@@ -1,3 +1,8 @@
+import { initTelemetry } from "./lib/otel";
+
+// Initialize OpenTelemetry before anything else
+initTelemetry();
+
 import { app } from "./api/server";
 
 const ROLE = process.env.SERVICE_ROLE || "DEV";

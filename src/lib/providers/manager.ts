@@ -29,6 +29,10 @@ export class ProviderManager {
         return ProviderManager.instance;
     }
 
+    public getPrimaryName(): string {
+        return this.primary.name;
+    }
+
     async send(email: EmailMessage): Promise<void> {
         // Check if circuit is open (Primary failed too many times)
         if (this.isCircuitOpen) {

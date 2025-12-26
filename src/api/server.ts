@@ -1,8 +1,11 @@
 import { Elysia } from "elysia";
 import { authMiddleware } from "./middlewares/auth";
+import { traceMiddleware } from "./middlewares/trace";
 import { sendEmail } from "./controllers/send.controller";
+import { handleWebhook } from "./controllers/webhook.controller";
 
 export const app = new Elysia()
+    .use(traceMiddleware)
     .onError(({ code, error, set }) => {
         let status = 500;
         const message = (error as any).message || "Unknown Error";
@@ -35,6 +38,7 @@ export const app = new Elysia()
         app
             .use(authMiddleware)
             .post("/send", sendEmail)
-    );
+    )
+    .post("/webhooks/:provider", handleWebhook);
 
 export type App = typeof app;
