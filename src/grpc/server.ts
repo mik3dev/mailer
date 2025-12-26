@@ -33,7 +33,7 @@ export const startGrpcServer = () => {
             return;
         }
         console.log(`[gRPC] Server running at ${address}`);
-        server.start();
+
     });
 };
 
