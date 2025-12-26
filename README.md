@@ -11,7 +11,7 @@ A backend-agnostic transactional email service built with **Bun**, **ElysiaJS**,
 - **Observability**: OpenTelemetry tracing ready and structured JSON logging.
 - **License**: MIT Open Source.
 
-[![CI/CD Pipeline](https://github.com/mik3dev/mailer-bun/actions/workflows/ci.yml/badge.svg)](https://github.com/mik3dev/mailer-bun/actions/workflows/ci.yml)
+[![CI/CD Pipeline](https://github.com/mik3dev/mailer/actions/workflows/ci.yml/badge.svg)](https://github.com/mik3dev/mailer/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 🛠️ Prerequisites
@@ -150,7 +150,7 @@ bun test
 The official Docker image is available on GitHub Container Registry:
 
 ```bash
-docker pull ghcr.io/mik3dev/mailer-bun:latest
+docker pull ghcr.io/mik3dev/mailer:latest
 ```
 
 ## 📄 License

@@ -1,14 +1,18 @@
 {
-  "name": "mailer-bun",
+  "name": "mailer",
   "module": "src/index.ts",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mik3dev/mailer-bun.git"
+    "url": "https://github.com/mik3dev/mailer.git"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "author": {
+    "name": "Miguel Acosta",
+    "email": "miguel.acosta1978@gmail.com"
   },
   "scripts": {
     "dev": "bun run --watch src/index.ts",
