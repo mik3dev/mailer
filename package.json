@@ -14,6 +14,7 @@
     "@opentelemetry/auto-instrumentations-node": "^0.67.3",
     "@opentelemetry/sdk-node": "^0.208.0",
     "@react-email/components": "^1.0.2",
+    "@react-email/tailwind": "^2.0.2",
     "@sinclair/typebox": "latest",
     "bullmq": "latest",
     "drizzle-orm": "latest",

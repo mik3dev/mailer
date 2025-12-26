@@ -13,7 +13,7 @@ export async function buildTemplate(templatePath: string, outDir: string): Promi
         outdir: outDir,
         target: "bun",
         format: "esm",
-        external: ["react", "react-dom", "@react-email/components", "tailwindcss"], // Externalize heavy deps
+        external: ["react", "react-dom", "@react-email/components", "tailwindcss", "@react-email/tailwind"], // Externalize heavy deps
         sourcemap: "none",
         minify: false, // Keep it readable for debugging if needed, or set true for perf
     });
