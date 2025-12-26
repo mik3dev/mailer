@@ -9,17 +9,23 @@
     "test": "bun test"
   },
   "dependencies": {
+    "@react-email/components": "^1.0.2",
     "@sinclair/typebox": "latest",
     "bullmq": "latest",
     "drizzle-orm": "latest",
     "elysia": "^1.4.19",
     "ioredis": "^5.8.2",
-    "postgres": "latest"
+    "postgres": "latest",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/ioredis": "^5.0.0",
     "@types/pg": "latest",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
     "drizzle-kit": "latest",
     "typescript": "latest"
   }
