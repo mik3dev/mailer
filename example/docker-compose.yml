@@ -34,10 +34,11 @@ services:
       REDIS_URL: redis://redis:6379
       SMTP_HOST: mailhog
       SMTP_PORT: 1025
+      TEMPLATES_DIR: /templates/emails
     ports:
       - "3000:3000"
     volumes:
-      - ../templates:/app/templates-src # Mount local templates
+      - ../templates:/templates # Clean mount
     depends_on:
       - postgres
       - redis
@@ -52,8 +53,9 @@ services:
       REDIS_URL: redis://redis:6379
       SMTP_HOST: mailhog
       SMTP_PORT: 1025
+      TEMPLATES_DIR: /templates/emails
     volumes:
-      - ../templates:/app/templates-src # Mount local templates
+      - ../templates:/templates # Clean mount
     depends_on:
       - postgres
       - redis
@@ -68,10 +70,11 @@ services:
       REDIS_URL: redis://redis:6379
       SMTP_HOST: mailhog
       SMTP_PORT: 1025
+      TEMPLATES_DIR: /templates/emails
     ports:
       - "50051:50051"
     volumes:
-      - ../templates:/app/templates-src # Mount local templates
+      - ../templates:/templates # Clean mount
     depends_on:
       - postgres
       - redis
