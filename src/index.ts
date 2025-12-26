@@ -15,6 +15,5 @@ if (ROLE === "API" || ROLE === "DEV") {
 }
 
 if (ROLE === "WORKER" || ROLE === "DEV") {
-    // TODO: Start worker
-    console.log("Worker starting... (placeholder)");
+    import("./worker/index");
 }

@@ -1,0 +1,8 @@
+node_modules
+templates
+.git
+.env
+.docs
+compose.yml
+README.md
+dist
