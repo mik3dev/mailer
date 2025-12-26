@@ -1,5 +1,6 @@
 import { Elysia } from "elysia";
 import { authMiddleware } from "./middlewares/auth";
+import { sendEmail } from "./controllers/send.controller";
 
 export const app = new Elysia()
     .onError(({ code, error, set }) => {
@@ -33,13 +34,7 @@ export const app = new Elysia()
     .group("/v1", app =>
         app
             .use(authMiddleware)
-            .post("/send", ({ client }) => {
-                return {
-                    status: "accepted",
-                    message: "Email queued (dummy)",
-                    clientId: client.id
-                };
-            })
+            .post("/send", sendEmail)
     );
 
 export type App = typeof app;
