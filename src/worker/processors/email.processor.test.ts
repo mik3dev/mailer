@@ -9,7 +9,8 @@ mock.module("../../lib/providers/manager", () => {
             getInstance: () => ({
                 send: async (email: any) => {
                     console.log("Mock Send:", email);
-                }
+                },
+                getPrimaryName: () => "mock-primary"
             })
         }
     };
