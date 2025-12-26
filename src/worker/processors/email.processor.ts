@@ -85,17 +85,6 @@ export const emailProcessor = async (job: Job<EmailPayload>) => {
         } catch (error: any) {
             logger.error("Failed to process email", { job_id: job.id, message_id: messageId, error });
 
-            // 4. Update DB -> Failed
-            if (messageId) {
-                await db.update(messages)
-                    .set({
-                        status: "failed",
-                        errorMessage: error.message || "Unknown Error",
-                        updatedAt: new Date()
-                    })
-                    .where(eq(messages.id, messageId));
-            }
-
             span.recordException(error as Error);
             throw error; // BullMQ needs to know it failed
         } finally {
