@@ -9,6 +9,10 @@ A backend-agnostic transactional email service built with **Bun**, **ElysiaJS**,
 - **Provider Resiliency**: Automatically switches to a secondary provider (e.g., AWS SES) if the primary (SMTP) fails repeatedly.
 - **Worker Queue**: Asynchronous email processing using **BullMQ** and **Redis**.
 - **Observability**: OpenTelemetry tracing ready and structured JSON logging.
+- **License**: MIT Open Source.
+
+[![CI/CD Pipeline](https://github.com/mik3dev/mailer-bun/actions/workflows/ci.yml/badge.svg)](https://github.com/mik3dev/mailer-bun/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 🛠️ Prerequisites
 
@@ -137,7 +141,18 @@ SERVICE_ROLE=GRPC bun run src/index.ts
 
 ## 🧪 Testing
 
-Run the unit tests using Bun's native test runner:
 ```bash
 bun test
 ```
+
+## 🐳 Docker Deployment
+
+The official Docker image is available on GitHub Container Registry:
+
+```bash
+docker pull ghcr.io/mik3dev/mailer-bun:latest
+```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
