@@ -18,6 +18,11 @@ const envSchema = z.object({
     SMTP_PASS: z.string().optional(),
     SMTP_SECURE: z.coerce.boolean().default(false),
     SMTP_FROM: z.string().default("noreply@example.com"),
+
+    // AWS SES
+    AWS_REGION: z.string().optional(),
+    AWS_ACCESS_KEY_ID: z.string().optional(),
+    AWS_SECRET_ACCESS_KEY: z.string().optional(),
 });
 
 // Validate env vars

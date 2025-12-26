@@ -1,6 +1,7 @@
-import type { EmailMessage, EmailProvider } from "./interface";
+import type { EmailMessage, EmailProvider, EmailResult } from "./interface";
 import { SmtpProvider } from "./smtp";
-// import { SesProvider } from "./aws-ses"; // Future
+import { AWSSESProvider } from "./aws-ses";
+import { env } from "../../config";
 
 export class ProviderManager {
     private static instance: ProviderManager;
@@ -16,10 +17,18 @@ export class ProviderManager {
 
     private constructor() {
         this.primary = new SmtpProvider();
-        // For MVP, we don't have a secondary provider configured yet, 
-        // but the logic expects one for failover.
-        // In a real scenario, this might be new SesProvider()
-        this.secondary = null;
+
+        // Initialize Secondary (SES) if credentials exist
+        if (env.AWS_REGION && env.AWS_ACCESS_KEY_ID && env.AWS_SECRET_ACCESS_KEY) {
+            this.secondary = new AWSSESProvider(
+                env.AWS_REGION,
+                env.AWS_ACCESS_KEY_ID,
+                env.AWS_SECRET_ACCESS_KEY
+            );
+        } else {
+            console.warn("AWS SES credentials not found. Secondary provider disabled.");
+            this.secondary = null;
+        }
     }
 
     public static getInstance(): ProviderManager {
@@ -33,7 +42,7 @@ export class ProviderManager {
         return this.primary.name;
     }
 
-    async send(email: EmailMessage): Promise<void> {
+    async send(email: EmailMessage): Promise<EmailResult> {
         // Check if circuit is open (Primary failed too many times)
         if (this.isCircuitOpen) {
             if (Date.now() - this.lastFailureTime > this.RESET_TIMEOUT) {
@@ -44,8 +53,9 @@ export class ProviderManager {
         }
 
         try {
-            await this.primary.send(email);
+            const result = await this.primary.send(email);
             this.failures = 0; // Reset consecutive failures on success
+            return result;
         } catch (error) {
             this.failures++;
             this.lastFailureTime = Date.now();
@@ -57,11 +67,11 @@ export class ProviderManager {
             }
 
             // Attempt fallback immediately
-            await this.sendWithSecondary(email);
+            return await this.sendWithSecondary(email);
         }
     }
 
-    private async sendWithSecondary(email: EmailMessage): Promise<void> {
+    private async sendWithSecondary(email: EmailMessage): Promise<EmailResult> {
         if (!this.secondary) {
             // If no backup, we just have to fail.
             // In a real app we might throw, but since we caught the primary error,
@@ -72,7 +82,7 @@ export class ProviderManager {
 
         console.log("[ProviderManager] Using Secondary Provider...");
         try {
-            await this.secondary.send(email);
+            return await this.secondary.send(email);
         } catch (error) {
             console.error("[ProviderManager] Both providers failed.");
             throw error;

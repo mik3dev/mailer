@@ -9,10 +9,18 @@ mock.module("../../lib/providers/manager", () => {
             getInstance: () => ({
                 send: async (email: any) => {
                     console.log("Mock Send:", email);
+                    return { id: "test-id", provider: "mock" };
                 },
                 getPrimaryName: () => "mock-primary"
             })
         }
+    };
+});
+
+// Mock Engine Loader
+mock.module("../../lib/engine/loader", () => {
+    return {
+        loadTemplate: async (name: string, props: any) => `<html>Mocked ${name}</html>`
     };
 });
 

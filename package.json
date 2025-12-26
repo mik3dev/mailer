@@ -9,6 +9,7 @@
     "test": "bun test"
   },
   "dependencies": {
+    "@aws-sdk/client-ses": "^3.958.0",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/auto-instrumentations-node": "^0.67.3",
     "@opentelemetry/sdk-node": "^0.208.0",

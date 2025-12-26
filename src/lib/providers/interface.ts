@@ -5,11 +5,16 @@ export interface EmailMessage {
     from?: string;
 }
 
+export interface EmailResult {
+    id: string;
+    provider: string;
+}
+
 export interface EmailProvider {
     name: string;
     /**
      * Sends an email.
      * Should throw an error if sending fails to trigger retries.
      */
-    send(email: EmailMessage): Promise<void>;
+    send(email: EmailMessage): Promise<EmailResult>;
 }

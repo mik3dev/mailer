@@ -9,8 +9,7 @@ import { trace, context, propagation } from "@opentelemetry/api";
 // I'll assume `renderTemplate` exists and works or I'll wrap it.
 
 // Check imports:
-// import { renderTemplate } from "../../lib/engine/renderer";
-// import { buildTemplate } from "../../lib/engine/builder";
+import { loadTemplate } from "../../lib/engine/loader";
 
 export const emailProcessor = async (job: Job<EmailPayload>) => {
     const { to, template, props, subject, traceId } = job.data;
@@ -41,8 +40,8 @@ export const emailProcessor = async (job: Job<EmailPayload>) => {
                 trace_id: traceId // Log explicity as well
             });
 
-            // MOCKING RENDERING FOR NOW till Epic 3 is fully integrated:
-            const html = `<html><body><h1>Mock Body for ${template}</h1><p>Props: ${JSON.stringify(props)}</p></body></html>`;
+            // 1. Render Template (JIT)
+            const html = await loadTemplate(template, props);
 
             // 2. Send via Provider
             const manager = ProviderManager.getInstance();

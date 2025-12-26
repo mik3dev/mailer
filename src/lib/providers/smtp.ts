@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import type { EmailMessage, EmailProvider } from "./interface";
+import type { EmailMessage, EmailProvider, EmailResult } from "./interface";
 import { env } from "../../config";
 
 export class SmtpProvider implements EmailProvider {
@@ -20,15 +20,19 @@ export class SmtpProvider implements EmailProvider {
         });
     }
 
-    async send(email: EmailMessage): Promise<void> {
+    async send(email: EmailMessage): Promise<EmailResult> {
         try {
-            await this.transporter.sendMail({
+            const result = await this.transporter.sendMail({
                 from: email.from || env.SMTP_FROM,
                 to: email.to,
                 subject: email.subject,
                 html: email.html,
             });
-            // In production, you'd log the info.messageId or response
+
+            return {
+                id: result.messageId,
+                provider: this.name
+            };
         } catch (error) {
             console.error(`[SmtpProvider] Failed to send email to ${email.to}`, error);
             throw error; // Rethrow to let the manager/circuit breaker handle it
