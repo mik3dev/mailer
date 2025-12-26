@@ -9,17 +9,18 @@
     "test": "bun test"
   },
   "dependencies": {
-    "elysia": "latest",
-    "drizzle-orm": "latest",
+    "@sinclair/typebox": "latest",
     "bullmq": "latest",
-    "postgres": "latest",
-    "ioredis": "latest",
-    "@sinclair/typebox": "latest"
+    "drizzle-orm": "latest",
+    "elysia": "^1.4.19",
+    "ioredis": "^5.8.2",
+    "postgres": "latest"
   },
   "devDependencies": {
-    "drizzle-kit": "latest",
     "@types/bun": "latest",
+    "@types/ioredis": "^5.0.0",
     "@types/pg": "latest",
+    "drizzle-kit": "latest",
     "typescript": "latest"
   }
 }
