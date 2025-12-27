@@ -5,10 +5,11 @@ import { buildTemplate } from "./builder";
 import { renderTemplate } from "./renderer";
 import { withDistributedLock } from "./locker";
 import { logger } from "../logger";
+import { env } from "../../config";
 
 // Configuration
-const TEMPLATES_DIR = process.env.TEMPLATES_DIR || join(process.cwd(), "templates/emails");
-const DIST_DIR = process.env.DIST_DIR || join(process.cwd(), "dist");
+const TEMPLATES_DIR = env.TEMPLATES_DIR || join(process.cwd(), "templates/emails");
+const DIST_DIR = env.DIST_DIR || join(process.cwd(), "dist");
 
 /**
  * Loads a template, compiling it just-in-time if necessary.

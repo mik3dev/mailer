@@ -10,6 +10,10 @@ const envSchema = z.object({
     // Redis
     REDIS_URL: z.string().default("redis://localhost:6379"),
 
+    // Templates
+    TEMPLATES_DIR: z.string().optional(),
+    DIST_DIR: z.string().optional(),
+
     // gRPC
     GRPC_PORT: z.coerce.number().default(50051),
 

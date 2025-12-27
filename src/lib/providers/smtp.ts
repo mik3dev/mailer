@@ -42,8 +42,13 @@ export class SmtpProvider implements EmailProvider {
                 id: result.messageId,
                 provider: this.name
             };
-        } catch (error) {
-            console.error(`[SmtpProvider] Failed to send email to ${email.to}`, error);
+        } catch (error: any) {
+            console.error(`[SmtpProvider] Failed to send email to ${email.to}`, {
+                error_message: error.message,
+                error_code: error.code,
+                error_command: error.command,
+                error_response: error.response,
+            });
             throw error; // Rethrow to let the manager/circuit breaker handle it
         }
     }

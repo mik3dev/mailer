@@ -32,6 +32,13 @@ export const sendEmail = async (ctx: Context) => {
             traceId
         });
 
+        console.log(`[API] Email enqueued successfully`, {
+            message_id: result.messageId,
+            trace_id: traceId,
+            to: body.to,
+            template: body.template
+        });
+
         ctx.set.status = 202;
         return {
             status: result.status,

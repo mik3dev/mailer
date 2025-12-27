@@ -56,10 +56,17 @@ export const emailProcessor = async (job: Job<EmailPayload>) => {
             }
 
             // 1. Render Template (JIT)
+            logger.info("Loading template", { template, message_id: messageId, trace_id: traceId });
             const html = await loadTemplate(template, props);
 
             // 2. Send via Provider
             const manager = ProviderManager.getInstance();
+            logger.info("Sending email via provider", {
+                to,
+                provider: manager.getPrimaryName(),
+                message_id: messageId,
+                trace_id: traceId
+            });
 
             const result = await manager.send({
                 to,
@@ -83,7 +90,14 @@ export const emailProcessor = async (job: Job<EmailPayload>) => {
 
             logger.info("Email sent successfully", { job_id: job.id, provider: manager.getPrimaryName() });
         } catch (error: any) {
-            logger.error("Failed to process email", { job_id: job.id, message_id: messageId, error });
+            logger.error("Failed to process email", {
+                job_id: job.id,
+                message_id: messageId,
+                error_message: error.message,
+                error_name: error.name,
+                error_stack: error.stack,
+                error_details: JSON.stringify(error, Object.getOwnPropertyNames(error))
+            });
 
             span.recordException(error as Error);
             throw error; // BullMQ needs to know it failed

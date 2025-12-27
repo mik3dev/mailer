@@ -20,5 +20,8 @@ COPY --from=prerelease /usr/src/app/src src
 COPY --from=prerelease /usr/src/app/package.json .
 COPY --from=prerelease /usr/src/app/drizzle drizzle
 
+# Create dist directory for template compilation (JIT)
+RUN mkdir -p dist && chown bun:bun dist
+
 USER bun
 ENTRYPOINT [ "bun", "run", "src/index.ts" ]

@@ -1,12 +1,13 @@
 services:
   postgres:
-    image: postgres:15-alpine
-    ports:
-      - "5432:5432"
+    image: postgres:16-alpine
+    restart: always
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: mailer
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -17,6 +18,7 @@ services:
 
   redis:
     image: redis:7-alpine
+    restart: always
     ports:
       - "6379:6379"
     volumes:
@@ -30,9 +32,74 @@ services:
 
   mailhog:
     image: mailhog/mailhog
+    restart: always
     ports:
-      - "1025:1025" # SMTP server
+      - "1025:1025" # SMTP
       - "8025:8025" # Web UI
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      SERVICE_ROLE: API
+      DATABASE_URL: postgres://user:password@postgres:5432/mailer
+      REDIS_URL: redis://redis:6379
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+      TEMPLATES_DIR: /templates/emails
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./templates:/templates
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      SERVICE_ROLE: WORKER
+      DATABASE_URL: postgres://user:password@postgres:5432/mailer
+      REDIS_URL: redis://redis:6379
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+      TEMPLATES_DIR: /templates/emails
+    volumes:
+      - ./templates:/templates
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  grpc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      SERVICE_ROLE: GRPC
+      DATABASE_URL: postgres://user:password@postgres:5432/mailer
+      REDIS_URL: redis://redis:6379
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+      TEMPLATES_DIR: /templates/emails
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./templates:/templates
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
 volumes:
   postgres_data:

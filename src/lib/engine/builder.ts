@@ -19,8 +19,13 @@ export async function buildTemplate(templatePath: string, outDir: string): Promi
     });
 
     if (!result.success) {
-        console.error("Build failed:", result.logs);
-        throw new Error(`Failed to build template: ${templatePath}`);
+        console.error("Build failed for template:", templatePath);
+        console.error("Build logs:", JSON.stringify(result.logs, null, 2));
+        console.error("Build outputs:", result.outputs.length);
+
+        // Extract meaningful error message from logs
+        const errorMessages = result.logs.map(log => log.message || String(log)).join(", ");
+        throw new Error(`Bundle failed: ${errorMessages || "Unknown build error"}`);
     }
 
     // Calculate generic output filename based on entrypoint

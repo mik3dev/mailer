@@ -1,13 +1,12 @@
 import { NodeSDK } from "@opentelemetry/sdk-node";
-import { ConsoleSpanExporter } from "@opentelemetry/sdk-trace-node";
 import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
 import { logger } from "./logger";
 
 // Initialize OpenTelemetry SDK
-// Using ConsoleSpanExporter for now (development visibility).
-// In production, this would likely be an OTLP exporter.
+// Note: No span exporter configured (no console noise).
+// Instrumentation still active → trace_id generation works.
+// To export spans, configure OTLP/Jaeger exporter in production.
 const sdk = new NodeSDK({
-    traceExporter: new ConsoleSpanExporter(),
     instrumentations: [getNodeAutoInstrumentations()],
 });
 
