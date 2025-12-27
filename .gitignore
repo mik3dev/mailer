@@ -35,7 +35,6 @@ postgres_data/
 redis_data/
 
 # Drizzle
-drizzle/meta/
 
 # Temporary
 tmp/
